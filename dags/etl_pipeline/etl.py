@@ -16,17 +16,21 @@ with DAG(
     start_date=datetime(2024,1,1),
     catchup=False
 ) as dag:
+    # read the csv file in data folder inside the container 
     read_csv = PythonOperator(
         task_id="read",
         python_callable=read_csv_file,
         op_kwargs={'path': '/opt/airflow/data/ventes.csv'}  
     )
+    # the processing stage (drop duplicates,null values,etc..)
     process=PythonOperator(
         task_id="process",
         python_callable=process_csv_file,
     )
+    # the load task for the processed data 
     load=PythonOperator(
         task_id='load',
-        python_callable=load
+        python_callable=load,
+        op_kwargs={'path':'/opt/airflow/data/processed_ventes.csv'}
     )
-    read_csv >> process >> load 
+    read_csv >> process >> load  # dependencies order #type: ignore

@@ -12,7 +12,9 @@ def process_csv_file(**kwargs):
     ti=kwargs['ti']
     csv_str=ti.xcom_pull(key='df',task_ids='read')
     df=pd.read_csv(StringIO(csv_str))
+    print("drop null values....")
     df=df.dropna()
+    print("drop duplicates...")
     df=df.drop_duplicates()
     csv_buffer=StringIO()
     df.to_csv(csv_buffer,index=False)
