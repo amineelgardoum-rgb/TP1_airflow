@@ -1,0 +1,7 @@
+venv
+logs 
+plugins
+__pycache__
+config
+.env
+etl (1).pdf
